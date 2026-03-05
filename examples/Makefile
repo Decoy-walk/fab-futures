@@ -272,25 +272,22 @@ gds-dice: $(DICE_BUILD)/$(DICE_TOP).gds
 gds-led: $(LED_BUILD)/$(LED_TOP).gds
 gds-all: gds-fortune gds-synth gds-dice gds-led
 
-# Note: GDS generation is optional - the DEF file is the main output and can be
-# viewed in KLayout or OpenROAD GUI. For tapeout, use OpenLane which handles
-# GDS stream-out properly.
+# GDS generation using KLayout
 $(FORTUNE_BUILD)/$(FORTUNE_TOP).gds: $(FORTUNE_BUILD)/$(FORTUNE_TOP).def
-	@echo "DEF layout complete: $<"
-	@echo "View with: make view-fortune (or open in KLayout/OpenROAD GUI)"
-	@touch $@
+	cd $(FORTUNE_DIR) && $(KLAYOUT) -zz -r ../$(FLOW)/def2gds.rb \
+		-rd def_file=build/$(FORTUNE_TOP).def -rd gds_file=build/$(FORTUNE_TOP).gds
 
 $(SYNTH_BUILD)/$(SYNTH_TOP).gds: $(SYNTH_BUILD)/$(SYNTH_TOP).def
-	@echo "DEF layout complete: $<"
-	@touch $@
+	cd $(SYNTH_DIR) && $(KLAYOUT) -zz -r ../$(FLOW)/def2gds.rb \
+		-rd def_file=build/$(SYNTH_TOP).def -rd gds_file=build/$(SYNTH_TOP).gds
 
 $(DICE_BUILD)/$(DICE_TOP).gds: $(DICE_BUILD)/$(DICE_TOP).def
-	@echo "DEF layout complete: $<"
-	@touch $@
+	cd $(DICE_DIR) && $(KLAYOUT) -zz -r ../$(FLOW)/def2gds.rb \
+		-rd def_file=build/$(DICE_TOP).def -rd gds_file=build/$(DICE_TOP).gds
 
 $(LED_BUILD)/$(LED_TOP).gds: $(LED_BUILD)/$(LED_TOP).def
-	@echo "DEF layout complete: $<"
-	@touch $@
+	cd $(LED_DIR) && $(KLAYOUT) -zz -r ../$(FLOW)/def2gds.rb \
+		-rd def_file=build/$(LED_TOP).def -rd gds_file=build/$(LED_TOP).gds
 
 # =============================================================================
 # Full build targets
